@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume-Job Matcher</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .input-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .results-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+        }
+        
+        .results-section.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .score-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .overall-score {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .score-item {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .score-item h4 {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        
+        .score-item .value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .skills-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .skill-list h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .skill-list.match h3 {
+            color: #27ae60;
+        }
+        
+        .skill-list.missing h3 {
+            color: #e74c3c;
+        }
+        
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .skill-tag {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .skill-match {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .skill-missing {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .score-breakdown {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Resume-Job Matcher</h1>
+            <p class="subtitle">Find the perfect job match instantly</p>
+        </header>
+        
+        <div class="error" id="error-message"></div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <h2>Your Resume</h2>
+                <textarea id="resume-input" placeholder="Paste your resume here..."></textarea>
+            </div>
+            
+            <div class="input-section">
+                <h2>Job Description</h2>
+                <textarea id="job-input" placeholder="Paste the job description here..."></textarea>
+            </div>
+            
+            <div class="input-section" style="grid-column: 1 / -1;">
+                <div class="button-group">
+                    <button class="btn-primary" onclick="analyzeMatch()">🔍 Analyze Match</button>
+                    <button class="btn-secondary" onclick="clearFields()">Clear</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing match...</p>
+        </div>
+        
+        <div class="results-section" id="results">
+            <h2>📊 Matching Results</h2>
+            
+            <div class="score-card">
+                <h3>Overall Match Score</h3>
+                <div class="overall-score" id="overall-score">0%</div>
+                
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <h4>Skills Match</h4>
+                        <div class="value" id="skill-score">0%</div>
+                    </div>
+                    <div class="score-item">
+                        <h4>Semantic Match</h4>
+                        <div class="value" id="semantic-score">0%</div>
+                    </div>
+                    <div class="score-item">
+                        <h4>Keywords Match</h4>
+                        <div class="value" id="keyword-score">0%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skills-section">
+                <div class="skill-list match">
+                    <h3>✅ Matching Skills</h3>
+                    <div class="skill-tags" id="matching-skills"></div>
+                </div>
+                <div class="skill-list missing">
+                    <h3>❌ Missing Skills</h3>
+                    <div class="skill-tags" id="missing-skills"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function analyzeMatch() {
+            const resume = document.getElementById('resume-input').value;
+            const jobDesc = document.getElementById('job-input').value;
+            const errorDiv = document.getElementById('error-message');
+            const loadingDiv = document.getElementById('loading');
+            const resultsDiv = document.getElementById('results');
+            
+            // Validation
+            if (!resume.trim() || !jobDesc.trim()) {
+                errorDiv.textContent = 'Please fill in both resume and job description';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            errorDiv.classList.remove('show');
+            loadingDiv.classList.add('show');
+            resultsDiv.classList.remove('show');
+            
+            try {
+                const response = await fetch('/api/match', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        resume: resume,
+                        job_description: jobDesc
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Analysis failed');
+                }
+                
+                const result = await response.json();
+                displayResults(result);
+                
+            } catch (error) {
+                errorDiv.textContent = 'Error analyzing match: ' + error.message;
+                errorDiv.classList.add('show');
+            } finally {
+                loadingDiv.classList.remove('show');
+            }
+        }
+        
+        function displayResults(result) {
+            document.getElementById('overall-score').textContent = result.overall_match_score + '%';
+            document.getElementById('skill-score').textContent = result.skill_match_score + '%';
+            document.getElementById('semantic-score').textContent = result.semantic_match_score + '%';
+            document.getElementById('keyword-score').textContent = result.keyword_match_score + '%';
+            
+            // Display matching skills
+            const matchingSkillsDiv = document.getElementById('matching-skills');
+            matchingSkillsDiv.innerHTML = result.matching_skills.length > 0 
+                ? result.matching_skills.map(skill => `<span class="skill-tag skill-match">${skill}</span>`).join('')
+                : '<p style="color: #666;">No matching skills found</p>';
+            
+            // Display missing skills
+            const missingSkillsDiv = document.getElementById('missing-skills');
+            missingSkillsDiv.innerHTML = result.missing_skills.length > 0
+                ? result.missing_skills.map(skill => `<span class="skill-tag skill-missing">${skill}</span>`).join('')
+                : '<p style="color: #27ae60;">All skills covered! 🎉</p>';
+            
+            document.getElementById('results').classList.add('show');
+        }
+        
+        function clearFields() {
+            document.getElementById('resume-input').value = '';
+            document.getElementById('job-input').value = '';
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('error-message').classList.remove('show');
+        }
+    </script>
+</body>
+</html>

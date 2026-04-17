@@ -1,0 +1,35 @@
+JOB POSTING: Senior Python Developer
+
+Company: Innovation Labs
+Location: San Francisco, CA
+Salary: $150,000 - $200,000
+
+ABOUT THE ROLE
+We're seeking a Senior Python Developer to lead our backend development team. You'll work on 
+large-scale systems, mentor junior developers, and contribute to architectural decisions.
+
+REQUIRED QUALIFICATIONS
+- 5+ years of professional Python development experience
+- Strong knowledge of SQL and relational databases
+- Experience with Django or Flask framework
+- Understanding of REST API design and implementation
+- Git version control proficiency
+- Experience with Agile/Scrum methodology
+
+PREFERRED QUALIFICATIONS
+- Experience with microservices architecture
+- Knowledge of Docker and Kubernetes
+- AWS cloud services experience
+- Machine Learning fundamentals
+- PostgreSQL expertise
+- Experience with Redis caching
+- GraphQL knowledge
+
+RESPONSIBILITIES
+- Design and implement scalable backend systems
+- Write clean, maintainable Python code
+- Develop and optimize SQL queries
+- Collaborate with frontend team on API design
+- Mentor junior developers
+- Participate in code reviews
+- Contribute to technical documentation

@@ -1,0 +1,33 @@
+JOHN SMITH
+john.smith@email.com | (555) 123-4567
+
+PROFESSIONAL SUMMARY
+Experienced Full-Stack Developer with 6 years of expertise in building scalable web applications.
+
+TECHNICAL SKILLS
+Languages: Python, JavaScript, Java, SQL
+Frontend: React, Vue.js, HTML5, CSS3
+Backend: Node.js, Django, Flask, Express
+Databases: PostgreSQL, MongoDB, Redis
+DevOps: AWS, Docker, Kubernetes, Jenkins
+Other: REST APIs, GraphQL, Git, Agile/Scrum
+
+PROFESSIONAL EXPERIENCE
+Senior Full-Stack Developer | Tech Company (2020-Present)
+- Led team of 4 developers in building microservices architecture
+- Implemented CI/CD pipeline using Jenkins and Docker
+- Improved application performance by 40% using React optimization
+
+Full-Stack Developer | StartUp Inc (2018-2020)
+- Built REST APIs using Django and Node.js
+- Developed responsive UI with React and Vue.js
+- Managed AWS infrastructure and database optimization
+
+Junior Developer | Web Solutions (2017-2018)
+- Developed web applications using Python and JavaScript
+- Worked with SQL and MongoDB databases
+- Collaborated with team using Git and Agile methodology
+
+EDUCATION
+Bachelor of Science in Computer Science
+University Name, 2017
