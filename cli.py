@@ -1,3 +1,4 @@
+import torch  # Must be imported first on Windows to fix DLL load order (WinError 1114)
 import argparse
 from src.matcher import ResumeMatcher
 from src.utils import read_file, format_report
